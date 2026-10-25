@@ -1,0 +1,5 @@
+<!-- Colors duplicated from src/styles/tokens.css (--color-bg-inverse-ish ink + --color-accent) since a static favicon can't read CSS variables. Update here too if the palette changes. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#191712"/>
+  <text x="32" y="43" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#e2650f" text-anchor="middle">AS</text>
+</svg>

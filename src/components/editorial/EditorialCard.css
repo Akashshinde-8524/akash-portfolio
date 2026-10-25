@@ -1,0 +1,287 @@
+/* ==========================================================================
+   Base card — shared by all six variants. This is what makes the six
+   panels read as one design system even though their internals differ.
+   ========================================================================== */
+.editorial-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  border: var(--border-thin);
+  padding: var(--space-5);
+  overflow: hidden;
+  min-height: 0; /* allow grid to control height, not content */
+  cursor: pointer;
+  transition: transform 80ms linear,
+    box-shadow var(--duration-normal) var(--ease-editorial),
+    opacity var(--duration-normal) var(--ease-editorial);
+}
+
+/* Hovered card: an inset accent ring plus a soft lift shadow, paired with
+   the translateY/rotate applied via inline style (JS-driven, follows the
+   cursor — see EditorialCard.jsx). One soft shadow only, kept low-contrast
+   so it reads as "lifted paper," not a heavy UI drop shadow. */
+.editorial-card.is-active {
+  box-shadow: inset 0 0 0 2px var(--color-accent), 0 20px 32px -18px rgba(25, 23, 18, 0.35);
+  z-index: 2;
+}
+
+/* Every OTHER card, while one is hovered: recede rather than compete. */
+.editorial-card.is-dimmed {
+  opacity: 0.55;
+}
+
+.editorial-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.editorial-card__label {
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
+}
+
+.editorial-card__body {
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+.editorial-card__title {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+  transition: color var(--duration-fast) var(--ease-editorial);
+}
+
+.editorial-card.is-active .editorial-card__title {
+  color: var(--color-accent-text);
+}
+
+.editorial-card__description {
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+  max-width: 42ch;
+}
+
+.editorial-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.editorial-card__meta li {
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
+  padding-bottom: var(--space-1);
+  border-bottom: var(--border-soft);
+}
+
+.editorial-card__image {
+  margin-top: var(--space-4);
+  flex: 1;
+  min-height: 100px;
+  overflow: hidden;
+}
+
+.editorial-card__image .card-image,
+.editorial-card__image .card-image-placeholder {
+  transition: transform var(--duration-slow) var(--ease-editorial);
+}
+
+.editorial-card.is-active .editorial-card__image .card-image,
+.editorial-card.is-active .editorial-card__image .card-image-placeholder {
+  transform: scale(1.06);
+}
+
+/* ==========================================================================
+   Variant: INTRO — the anchor tile. Type-led by default; when a portrait
+   image is supplied (see homeCards.js), the header still spans full width
+   but the body and image sit side by side below it.
+   ========================================================================== */
+.editorial-card--intro {
+  background: var(--color-bg);
+}
+
+.editorial-card--intro .editorial-card__body {
+  padding-right: var(--space-8); /* keeps text clear of the vertical label in the corner */
+}
+
+.editorial-card--intro .editorial-card__title {
+  font-family: var(--font-serif);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-display);
+  letter-spacing: var(--tracking-tight);
+  max-width: 14ch;
+}
+
+.editorial-card--intro .editorial-card__description {
+  font-size: var(--text-body-lg);
+  max-width: 46ch;
+  margin-top: var(--space-3);
+}
+
+/* When a portrait is present: switch to a grid so text and image sit
+   side by side, with the header still spanning the full width above both. */
+.editorial-card--intro:has(.editorial-card__image) {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  grid-template-rows: auto 1fr;
+  column-gap: var(--space-6);
+}
+
+.editorial-card--intro:has(.editorial-card__image) .editorial-card__header {
+  grid-column: 1 / -1;
+}
+
+.editorial-card--intro:has(.editorial-card__image) .editorial-card__body {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+  margin-top: 0;
+  padding-right: 0;
+}
+
+.editorial-card--intro:has(.editorial-card__image) .editorial-card__image {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 0;
+  border-left: var(--border-thin);
+  padding-left: var(--space-6);
+}
+
+/* The vertical label was designed for the type-only layout — with a
+   portrait present there's already a strong visual anchor, so the label
+   is dropped rather than fought into a corner where it'd overlap either
+   the text or the image. */
+.editorial-card--intro:has(.editorial-card__image) .vertical-label {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  /* Below the vertical-label breakpoint the side-by-side grid also stops
+     making sense — fall back to a simple stacked layout. */
+  .editorial-card--intro:has(.editorial-card__image) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .editorial-card--intro:has(.editorial-card__image) .editorial-card__image {
+    border-left: none;
+    padding-left: 0;
+    margin-top: var(--space-4);
+    max-height: 220px;
+  }
+}
+
+/* ==========================================================================
+   Variant: ABOUT — image-led, compact copy.
+   ========================================================================== */
+.editorial-card--about .editorial-card__image {
+  order: -1; /* image sits above the header/body on this variant */
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+  max-height: 140px;
+}
+
+.editorial-card--about {
+  flex-direction: column;
+}
+
+.editorial-card--about .editorial-card__header {
+  order: 0;
+}
+
+/* ==========================================================================
+   Variant: EXPERIENCE — text/list-led, no image.
+   ========================================================================== */
+.editorial-card--experience .editorial-card__meta li {
+  font-family: var(--font-display);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  width: 100%;
+  border-bottom: var(--border-soft);
+  padding: var(--space-2) 0;
+}
+
+/* ==========================================================================
+   Variant: PROJECTS — largest image area, most visual weight.
+   ========================================================================== */
+.editorial-card--projects .editorial-card__image {
+  min-height: 160px;
+}
+
+.editorial-card--projects .editorial-card__title {
+  font-size: var(--text-h2);
+}
+
+/* ==========================================================================
+   Variant: SKILLS — compact, category tags instead of a plain list.
+   ========================================================================== */
+.editorial-card--skills .editorial-card__meta li {
+  border: var(--border-thin);
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-3);
+}
+
+/* ==========================================================================
+   Variant: CONTACT — rule-heavy, minimal, arrow affordance.
+   ========================================================================== */
+.editorial-card--contact {
+  justify-content: center;
+}
+
+.editorial-card--contact .editorial-card__body {
+  margin-top: 0;
+  padding-top: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-top: var(--border-thin);
+  padding-top: var(--space-4);
+}
+
+.editorial-card--contact .editorial-card__title::after {
+  content: " →";
+  color: var(--color-accent-text);
+}
+
+.editorial-card--contact .editorial-card__description {
+  display: none; /* contact card stays minimal — full detail lives on the page itself */
+}
+
+/* ==========================================================================
+   Hover reveal: CTA arrow (all variants except contact, which shows a
+   static arrow beside its title instead).
+   ========================================================================== */
+.editorial-card__cta {
+  display: inline-block;
+  margin-top: var(--space-3);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent-text);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity var(--duration-normal) var(--ease-editorial),
+    transform var(--duration-normal) var(--ease-editorial);
+}
+
+.editorial-card.is-active .editorial-card__cta {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ==========================================================================
+   Hover reveal: numeral badge grows slightly to reinforce which card is active.
+   ========================================================================== */
+.editorial-card.is-active .numeral {
+  transform: scale(1.12);
+}

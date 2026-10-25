@@ -1,0 +1,76 @@
+.intro-page__layout {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: var(--space-6);
+}
+
+.intro-page__portrait {
+  border: var(--border-thin);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .intro-page__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .intro-page__portrait {
+    max-width: 220px;
+  }
+}
+
+.intro-page__name {
+  font-family: var(--font-serif);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-h1);
+  margin-bottom: var(--space-1);
+}
+
+.intro-page__role {
+  font-size: var(--text-body-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
+}
+
+.intro-page__statement {
+  font-size: var(--text-body-lg);
+  max-width: 60ch;
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.intro-page__learning {
+  font-size: var(--text-body);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
+}
+
+.intro-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.intro-page__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  border-top: var(--border-soft);
+  padding-top: var(--space-4);
+}
+
+.intro-page__links a {
+  font-family: var(--font-display);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  transition: color var(--duration-fast) var(--ease-editorial);
+}
+
+.intro-page__links a:hover,
+.intro-page__links a:focus-visible {
+  color: var(--color-accent-text);
+}

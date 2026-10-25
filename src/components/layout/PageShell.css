@@ -1,0 +1,49 @@
+.page-shell {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--gutter) var(--space-9);
+}
+
+@media (max-width: 640px) {
+  /* var(--space-9) alone comfortably clears the ~56px bar on most phones,
+     but this guarantees clearance even with a large safe-area inset. */
+  .page-shell {
+    padding-bottom: calc(var(--space-9) + 56px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.page-shell__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-micro);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-weight: var(--weight-medium);
+  margin-bottom: var(--space-4);
+}
+
+.page-shell__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 var(--space-2);
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
+}
+
+.page-shell__title {
+  font-size: var(--text-h1);
+  margin-bottom: var(--space-6);
+  max-width: 16ch;
+}
+
+.page-shell__content {
+  border-top: var(--border-soft);
+  padding-top: var(--space-6);
+}

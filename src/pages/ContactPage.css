@@ -1,0 +1,11 @@
+.contact-page__layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--space-8);
+}
+
+@media (max-width: 640px) {
+  .contact-page__layout {
+    grid-template-columns: 1fr;
+  }
+}

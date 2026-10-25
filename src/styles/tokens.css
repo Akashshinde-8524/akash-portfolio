@@ -1,0 +1,135 @@
+/* ==========================================================================
+   DESIGN TOKENS
+   ==========================================================================
+   This file is the ONLY place color values should be written as hex codes.
+   Every component in the app reads colors through the semantic variables
+   in the second block below (--color-bg, --color-accent, etc.), never
+   through the raw palette directly, and never as a hardcoded hex.
+
+   TO RESTYLE THE WHOLE SITE:
+   - Change the "RAW PALETTE" hex values below, and the whole site updates.
+   - To swap the accent color entirely, change --palette-accent (and its
+     -ink/-soft variants) — every button, tag, rule and hover state that
+     uses --color-accent will follow.
+   - Nothing outside this file should ever need editing to change colors.
+   ========================================================================== */
+
+:root {
+  /* --------------------------------------------------------------------
+     RAW PALETTE — edit these to restyle the site
+     -------------------------------------------------------------------- */
+  --palette-paper: #efe9dc;         /* base background, off-white/paper */
+  --palette-paper-dim: #e6dfd0;     /* slightly deeper paper, for panel fills */
+  --palette-ink: #191712;           /* primary text / near-black */
+  --palette-ink-soft: #55503f;      /* secondary text, muted */
+  --palette-line: #191712;          /* rule/border color (usually = ink) */
+  --palette-line-soft: #cdc4ac;     /* faint dividers on paper */
+
+  --palette-accent: #e2650f;        /* primary accent — numerals, links, CTAs */
+  --palette-accent-ink: #ffffff;    /* text color placed ON TOP of accent fills */
+  --palette-accent-soft: #f4d9bd;   /* tint of accent, for subtle fills/badges */
+  /* The vivid accent above is ~2.8:1 against the paper background — well
+     short of WCAG AA's 4.5:1 for text. This darker variant is for accent
+     used AS TEXT (links, active states, hover colors) on the paper
+     background; the vivid accent stays reserved for fills where the
+     foreground is white/dark (badges, button backgrounds), which have
+     their own separate, already-sufficient contrast. */
+  --palette-accent-text: #a8460c;
+
+  --palette-surface: #ffffff;       /* card/panel background where it differs from paper */
+
+  /* --------------------------------------------------------------------
+     SEMANTIC TOKENS — components use these, never the raw palette above
+     -------------------------------------------------------------------- */
+  --color-bg: var(--palette-paper);
+  --color-bg-dim: var(--palette-paper-dim);
+  --color-surface: var(--palette-surface);
+
+  --color-text: var(--palette-ink);
+  --color-text-muted: var(--palette-ink-soft);
+  --color-text-on-accent: var(--palette-accent-ink);
+
+  --color-border: var(--palette-line);
+  --color-border-soft: var(--palette-line-soft);
+
+  --color-accent: var(--palette-accent);
+  --color-accent-soft: var(--palette-accent-soft);
+  --color-accent-text: var(--palette-accent-text);
+
+  --color-focus-ring: var(--palette-accent);
+
+  /* --------------------------------------------------------------------
+     TYPOGRAPHY
+     -------------------------------------------------------------------- */
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
+
+  /* Fluid type scale — scales smoothly between mobile and desktop viewports */
+  --text-display: clamp(2.75rem, 2rem + 3.2vw, 5.5rem);   /* homepage hero name */
+  --text-h1: clamp(2.25rem, 1.7rem + 2.4vw, 3.75rem);      /* page titles */
+  --text-h2: clamp(1.5rem, 1.25rem + 1.1vw, 2.25rem);      /* section headings */
+  --text-h3: clamp(1.15rem, 1.05rem + 0.4vw, 1.5rem);      /* card titles */
+  --text-body-lg: clamp(1.05rem, 1rem + 0.2vw, 1.2rem);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-micro: 0.72rem;                                    /* eyebrow labels, meta */
+
+  --leading-tight: 1.05;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+  --tracking-wider: 0.1em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* --------------------------------------------------------------------
+     SPACING SCALE
+     -------------------------------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  /* --------------------------------------------------------------------
+     BORDERS / SHAPE
+     -------------------------------------------------------------------- */
+  --border-thin: 1px solid var(--color-border);
+  --border-soft: 1px solid var(--color-border-soft);
+  --radius: 0px; /* editorial/print aesthetic: square corners throughout */
+
+  /* --------------------------------------------------------------------
+     MOTION
+     -------------------------------------------------------------------- */
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 450ms;
+
+  /* --------------------------------------------------------------------
+     LAYOUT
+     -------------------------------------------------------------------- */
+  --content-max-width: 1280px;
+  --gutter: clamp(1.25rem, 1rem + 1.5vw, 3rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
+}

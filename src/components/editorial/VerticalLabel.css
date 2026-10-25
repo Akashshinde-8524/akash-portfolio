@@ -1,0 +1,20 @@
+.vertical-label {
+  position: absolute;
+  bottom: var(--space-5);
+  right: var(--space-5);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text);
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .vertical-label {
+    display: none; /* the card reflows to a compact mobile layout where this has no room */
+  }
+}

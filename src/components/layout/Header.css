@@ -1,0 +1,150 @@
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--space-5) var(--gutter);
+  border-bottom: var(--border-soft);
+}
+
+.site-header__brand {
+  font-family: var(--font-display);
+  font-size: var(--text-small);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text);
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-editorial);
+}
+
+.site-header__brand:hover,
+.site-header__brand:focus-visible {
+  color: var(--color-accent-text);
+}
+
+.site-header__nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+}
+
+.site-header__nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-small);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding-bottom: var(--space-1);
+  border-bottom: 2px solid transparent;
+  transition: color var(--duration-fast) var(--ease-editorial),
+    border-color var(--duration-fast) var(--ease-editorial);
+}
+
+.site-header__nav a:hover,
+.site-header__nav a:focus-visible {
+  color: var(--color-text);
+}
+
+/* Current page — the only place an accent underline appears in the nav,
+   so it reads clearly as "you are here" rather than decoration. */
+.site-header__nav a.is-active {
+  color: var(--color-accent-text);
+  border-bottom-color: var(--color-accent);
+}
+
+.site-header__nav-number {
+  font-size: var(--text-micro);
+  opacity: 0.7;
+}
+
+@media (max-width: 640px) {
+  /* Below this breakpoint, the section list moves to the fixed bottom
+     tab bar instead — the header shrinks to just the "Index" link. */
+  .site-header {
+    justify-content: flex-start;
+    padding: var(--space-4) var(--gutter);
+  }
+
+  .site-header__nav {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Mobile bottom tab bar — hidden on desktop, fixed to the bottom of the
+   viewport below the same breakpoint used everywhere else in the project.
+   ========================================================================== */
+.mobile-tab-bar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .mobile-tab-bar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    background: var(--color-bg);
+    border-top: var(--border-thin);
+    /* Keeps tabs clear of the home-indicator gesture bar on iPhones etc. */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+.mobile-tab-bar__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: 56px;
+  padding: var(--space-2) var(--space-1);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.mobile-tab-bar__numeral {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 var(--space-1);
+  background: var(--color-bg-dim);
+  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: var(--weight-semibold);
+  transition: background var(--duration-fast) var(--ease-editorial),
+    color var(--duration-fast) var(--ease-editorial);
+}
+
+.mobile-tab-bar__label {
+  font-family: var(--font-display);
+  font-size: 0.625rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+
+/* Current page — same "accent = you are here" convention as the desktop
+   nav, applied to both the label and the numeral badge. */
+.mobile-tab-bar__item.is-active {
+  color: var(--color-accent-text);
+}
+
+.mobile-tab-bar__item.is-active .mobile-tab-bar__numeral {
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+}

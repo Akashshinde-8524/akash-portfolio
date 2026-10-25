@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Production build
+dist/
+dist-ssr/
+
+# Environment variables & secrets (CRITICAL: keeps your Master Secret Key private!)
+.env
+.env.local
+.env.*.local
+
+# Vercel project configuration
+.vercel/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Archives & Temporary
+*.zip
+portfolio-deploy.zip

@@ -1,0 +1,50 @@
+.editorial-grid {
+  display: grid;
+  gap: var(--space-5);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--gutter);
+
+  /* ---- Desktop / laptop: asymmetric editorial composition ----
+     intro is a full-width hero row at the top; about/experience/skills
+     form an even three-column strip beneath it; projects (large) and
+     contact (narrow) close out the bottom row. Every area below is a
+     clean rectangle — required for grid-template-areas. */
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: minmax(360px, auto) minmax(200px, auto) minmax(240px, auto);
+  grid-template-areas:
+    "intro intro intro intro intro intro intro intro intro intro intro intro"
+    "about about about about experience experience experience experience skills skills skills skills"
+    "projects projects projects projects projects projects projects projects contact contact contact contact";
+}
+
+/* ---- Tablet: simplify to two columns, still non-identical sizing ---- */
+@media (max-width: 1024px) {
+  .editorial-grid {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "intro intro intro intro intro intro"
+      "about about experience experience skills skills"
+      "projects projects projects projects projects projects"
+      "contact contact contact contact contact contact";
+  }
+}
+
+/* ---- Mobile: deliberate single-column stack, fixed 01→06 order ----
+   Each card is shown in a "resting" state with enough info to be useful
+   without a hover reveal (see EditorialCard mobile rules). ---- */
+@media (max-width: 640px) {
+  .editorial-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-template-areas:
+      "intro"
+      "about"
+      "experience"
+      "projects"
+      "skills"
+      "contact";
+    gap: var(--space-4);
+  }
+}

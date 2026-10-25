@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Only the authorized admin email can write or edit data
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == "aka326000@gmail.com";
+    }
+
+    // Profile & site-wide settings
+    match /content/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Projects: Public can only view published projects; Admin has full access
+    match /projects/{projectId} {
+      allow read: if resource.data.status == "published" || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Experience entries: Public read; Admin write
+    match /experience/{entryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Skills categories: Public read; Admin write
+    match /skills/{skillId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

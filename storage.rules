@@ -1,0 +1,16 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Only the authorized admin email can upload or modify assets
+    function isAdmin() {
+      return request.auth != null && request.auth.token.email == "aka326000@gmail.com";
+    }
+
+    match /{allPaths=**} {
+      // Public visitors can view project screenshots, portraits, and resume PDFs
+      allow read: if true;
+      // Only admin can upload or delete assets (< 10MB per file)
+      allow write: if isAdmin() && request.resource.size < 10 * 1024 * 1024;
+    }
+  }
+}
