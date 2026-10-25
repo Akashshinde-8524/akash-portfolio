@@ -36,26 +36,25 @@ export const profile = {
   },
 
   links: {
-    github: "PLACEHOLDER_GITHUB_URL", // not in the resume yet
-    linkedin: "www.linkedin.com/in/akash-r-shinde", // not in the resume yet
+    github: "https://github.com/Akashshinde-8524",
+    linkedin: "https://www.linkedin.com/in/akash-r-shinde",
     email: "mailto:akashshinde0854@gmail.com",
-    resume: "/resume.pdf", // drop the actual resume PDF into /public as resume.pdf
+    resume: "/resume.pdf",
   },
 
   // Used by the About page.
   about: {
-    // Each array entry renders as its own paragraph. Only the first is
-    // from the resume ("Profile" section) — add a second once you've
-    // written one; the layout already supports more than one paragraph.
     bio: [
       "A web developer with a strong interest in projects that require both conceptual and analytical thinking.",
-      "PLACEHOLDER — a second paragraph on what you're focused on now and the kind of team or role you're aiming for.",
+      "Specializing in responsive React frontend development, modern component architecture, and full-stack development with Java and Spring Boot.",
     ],
     careerDirection:
-      "To Start my career as a Frontend Developer Trainee, applying my skills in HTML, CSS, JavaScript, and React to.",
+      "To Start my career as a Frontend Developer Trainee, applying my skills in HTML, CSS, JavaScript, and React to develop responsive and user-friendly web application while contributing to real-world projects and gaining practical industry experience.",
     // From the resume's "Strengths" section.
     strengths: [
-      "Excellent knowledge of core subjects",
+      "Problem-Solver",
+      "Effective Communication",
+      "Adaptability",
       "Quick learner and adaptable",
       "Good problem-solving skills",
     ],

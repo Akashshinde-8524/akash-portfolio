@@ -1,20 +1,23 @@
-// Used by the Skills page (Phase 8). Populated from your resume's
-// "Technical Skills" section plus the technologies you confirmed earlier
-// (HTML, CSS, JavaScript, React, Bootstrap, SQL, Java). Only technologies
-// you've actually confirmed are listed here — add more categories/items
-// as you confirm them, nothing is inferred or invented.
-
+// Technical and soft skills from Akash Shinde's updated resume
 export const skills = [
   {
     category: "Frontend",
-    items: ["HTML", "CSS", "JavaScript", "React", "Bootstrap"],
+    items: ["HTML", "CSS", "JavaScript", "React.js", "Bootstrap", "Responsive Web Design"],
   },
   {
     category: "Backend",
-    items: ["Java"],
+    items: ["Java", "Spring Boot", "REST API Integration"],
   },
   {
     category: "Database",
-    items: ["SQL", "MySQL (basic)"],
+    items: ["MySQL", "SQL"],
+  },
+  {
+    category: "Tools & Platforms",
+    items: ["Git", "GitHub", "VS Code", "Vite"],
+  },
+  {
+    category: "Soft Skills",
+    items: ["Problem-Solver", "Effective Communication", "Adaptability"],
   },
 ];
