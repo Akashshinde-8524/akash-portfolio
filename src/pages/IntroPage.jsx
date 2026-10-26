@@ -3,6 +3,7 @@ import { Button } from "../components/ui/Button";
 import { CardImage } from "../components/ui/CardImage";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { usePortfolioData } from "../context";
+import { formatExternalUrl } from "../utils/formatUrl";
 import "./IntroPage.css";
 
 export function IntroPage() {
@@ -26,17 +27,29 @@ export function IntroPage() {
             <Button to="/projects" variant="primary">
               View projects
             </Button>
-            <Button as="a" href={profile.links.resume} variant="secondary" download>
+            <Button as="a" href={profile.links.resume} variant="secondary" download="Akash_Shinde_Resume.pdf">
               Download resume
             </Button>
           </div>
 
           <ul className="intro-page__links">
             <li>
-              <a href={profile.links.github}>GitHub</a>
+              <a
+                href={formatExternalUrl(profile.links.github)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub
+              </a>
             </li>
             <li>
-              <a href={profile.links.linkedin}>LinkedIn</a>
+              <a
+                href={formatExternalUrl(profile.links.linkedin)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LinkedIn
+              </a>
             </li>
             <li>
               <a href={profile.links.email}>Email</a>

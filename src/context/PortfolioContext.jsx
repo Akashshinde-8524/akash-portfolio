@@ -158,6 +158,38 @@ export function PortfolioProvider({ children }) {
     await portfolioService.resetToDefaults();
   };
 
+  const importPortfolioData = async (incomingData) => {
+    if (!incomingData || typeof incomingData !== "object") {
+      throw new Error("Invalid portfolio data file format");
+    }
+    const nextProfile = incomingData.profile ? { ...profile, ...incomingData.profile } : profile;
+    const nextProjects = Array.isArray(incomingData.projects) ? incomingData.projects : projects;
+    const nextExperience = Array.isArray(incomingData.experience) ? incomingData.experience : experience;
+    const nextSkills = Array.isArray(incomingData.skills) ? incomingData.skills : skills;
+
+    setProfile(nextProfile);
+    setProjects(nextProjects);
+    setExperience(nextExperience);
+    setSkills(nextSkills);
+
+    const now = new Date().toISOString();
+    setLastUpdated(now);
+
+    await persist({
+      profile: nextProfile,
+      projects: nextProjects,
+      experience: nextExperience,
+      skills: nextSkills,
+    });
+
+    return {
+      profile: nextProfile,
+      projects: nextProjects,
+      experience: nextExperience,
+      skills: nextSkills,
+    };
+  };
+
   const uploadAsset = (file) => {
     return portfolioService.uploadAsset(file);
   };
@@ -187,6 +219,7 @@ export function PortfolioProvider({ children }) {
     deleteExperience,
     updateSkills,
     resetToDefaults,
+    importPortfolioData,
     uploadAsset,
   };
 

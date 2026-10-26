@@ -5,6 +5,7 @@ import { Tag } from "../components/ui/Tag";
 import { Button } from "../components/ui/Button";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { usePortfolioData } from "../context";
+import { formatExternalUrl } from "../utils/formatUrl";
 import "./ProjectDetailPage.css";
 
 export function ProjectDetailPage() {
@@ -61,12 +62,24 @@ export function ProjectDetailPage() {
 
       <div className="project-detail__actions">
         {project.githubUrl && (
-          <Button as="a" href={project.githubUrl} variant="secondary">
+          <Button
+            as="a"
+            href={formatExternalUrl(project.githubUrl)}
+            variant="secondary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             GitHub
           </Button>
         )}
         {project.liveUrl && (
-          <Button as="a" href={project.liveUrl} variant="primary">
+          <Button
+            as="a"
+            href={formatExternalUrl(project.liveUrl)}
+            variant="primary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Live demo
           </Button>
         )}

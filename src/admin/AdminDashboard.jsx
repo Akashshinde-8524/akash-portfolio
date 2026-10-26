@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth, usePortfolioData } from "../context";
 import { portfolioService } from "../services/portfolioService";
+import { formatExternalUrl } from "../utils/formatUrl";
 import "./AdminDashboard.css";
 
 const EMPTY_PROJECT = {
@@ -45,6 +46,7 @@ export function AdminDashboard() {
     deleteExperience,
     updateSkills,
     resetToDefaults,
+    importPortfolioData,
     uploadAsset,
   } = usePortfolioData();
 
@@ -126,9 +128,13 @@ export function AdminDashboard() {
         },
         links: {
           ...profile.links,
-          github: profileForm.github.trim(),
-          linkedin: profileForm.linkedin.trim(),
-          email: `mailto:${profileForm.email.trim()}`,
+          github: formatExternalUrl(profileForm.github),
+          linkedin: formatExternalUrl(profileForm.linkedin),
+          email: profileForm.email.trim()
+            ? profileForm.email.trim().startsWith("mailto:")
+              ? profileForm.email.trim()
+              : `mailto:${profileForm.email.trim()}`
+            : "",
           resume: profileForm.resume.trim(),
         },
         education: {
@@ -206,8 +212,8 @@ export function AdminDashboard() {
         date: projectForm.date.trim(),
         status: projectForm.status,
         image: projectForm.image.trim() || null,
-        githubUrl: projectForm.githubUrl.trim(),
-        liveUrl: projectForm.liveUrl.trim(),
+        githubUrl: formatExternalUrl(projectForm.githubUrl),
+        liveUrl: formatExternalUrl(projectForm.liveUrl),
         technologies: techArray,
         features: featuresArray,
       };
@@ -413,6 +419,85 @@ export function AdminDashboard() {
     showToast("Backup JSON file downloaded!");
   };
 
+  // Direct Portfolio JSON File Upload Handler (Import from device)
+  const handleImportPortfolioFile = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      showToast("Reading portfolio file from device…");
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          const result = await importPortfolioData(parsed);
+          if (result?.profile) {
+            setProfileForm({
+              name: result.profile.name || "",
+              role: result.profile.role || "",
+              statement: result.profile.statement || "",
+              location: result.profile.location || "",
+              introPhoto: result.profile.introPhoto || result.profile.photo || "/images/portrait.jpg",
+              aboutPhoto: result.profile.aboutPhoto || result.profile.photo || "/images/portrait.jpg",
+              photo: result.profile.photo || "/images/portrait.jpg",
+              email: result.profile.contact?.email || "",
+              phone: result.profile.contact?.phone || "",
+              github: result.profile.links?.github || "",
+              linkedin: result.profile.links?.linkedin || "",
+              resume: result.profile.links?.resume || "/resume.pdf",
+              currentlyLearning: result.profile.currentlyLearning || "",
+              degree: result.profile.education?.degree || "",
+              institution: result.profile.education?.institution || "",
+              duration: result.profile.education?.duration || "",
+              gpa: result.profile.education?.gpa || "",
+              careerDirection: result.profile.about?.careerDirection || "",
+              bio: result.profile.about?.bio?.join("\n\n") || "",
+              strengths: result.profile.about?.strengths?.join(", ") || "",
+            });
+          }
+          showToast("Portfolio data imported & synced successfully! 🎉");
+        } catch (parseErr) {
+          showToast("Invalid JSON file: " + parseErr.message, "error");
+        }
+      };
+      reader.readAsText(file);
+    } catch (err) {
+      showToast("Failed to upload portfolio file: " + err.message, "error");
+    } finally {
+      e.target.value = "";
+    }
+  };
+
+  // Direct Resume PDF Upload Handler (from device)
+  const handleResumeUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      showToast("Please select a PDF file (.pdf)", "error");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showToast("Resume PDF should be under 5MB", "error");
+      return;
+    }
+    try {
+      showToast("Attaching resume PDF from device…");
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Data = event.target.result;
+        setProfileForm((prev) => ({
+          ...prev,
+          resume: base64Data,
+        }));
+        showToast("Resume PDF attached! Click 'Save Profile Changes' to apply.");
+      };
+      reader.readAsDataURL(file);
+    } catch {
+      showToast("Failed to read resume file", "error");
+    } finally {
+      e.target.value = "";
+    }
+  };
+
 
   // Image Upload Handler
   const handleImageUpload = async (e, targetSetter) => {
@@ -458,6 +543,19 @@ export function AdminDashboard() {
 
         <div className="admin-hub__topbar-actions">
           <span className="admin-hub__last-updated">Synced: {formattedDate}</span>
+          <label
+            className="admin-hub__file-btn"
+            style={{ cursor: "pointer", padding: "0.45rem 0.85rem", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
+            title="Upload portfolio JSON file directly from your device"
+          >
+            <span>Upload Portfolio 📤</span>
+            <input
+              type="file"
+              accept=".json,application/json"
+              onChange={handleImportPortfolioFile}
+              style={{ display: "none" }}
+            />
+          </label>
           <Link to="/" target="_blank" rel="noreferrer" className="admin-hub__site-btn">
             View Live Portfolio ↗
           </Link>
@@ -608,13 +706,30 @@ export function AdminDashboard() {
                 </div>
 
                 <div className="admin-hub__field">
-                  <label htmlFor="p-resume">Resume PDF Link or Path</label>
-                  <input
-                    id="p-resume"
-                    value={profileForm.resume}
-                    onChange={(e) => setProfileForm({ ...profileForm, resume: e.target.value })}
-                    placeholder="/resume.pdf"
-                  />
+                  <label htmlFor="p-resume" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span>Resume PDF Link or Document</span>
+                    <span className="admin-hub__field-tag">PDF / Download</span>
+                  </label>
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <input
+                      id="p-resume"
+                      value={profileForm.resume?.startsWith("data:") ? "[Uploaded PDF File Attached]" : profileForm.resume}
+                      onChange={(e) => setProfileForm({ ...profileForm, resume: e.target.value })}
+                      placeholder="/resume.pdf or URL"
+                    />
+                    <label className="admin-hub__file-btn" style={{ cursor: "pointer" }}>
+                      Upload PDF
+                      <input
+                        type="file"
+                        accept="application/pdf,.pdf"
+                        onChange={handleResumeUpload}
+                        style={{ display: "none" }}
+                      />
+                    </label>
+                  </div>
+                  <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted, #55503f)", marginTop: "0.25rem", display: "block" }}>
+                    Upload a .pdf directly from your device, or enter a URL or path like /resume.pdf
+                  </span>
                 </div>
               </div>
             </div>
@@ -1224,15 +1339,27 @@ export function AdminDashboard() {
             </div>
 
             <div className="admin-hub__card">
-              <h3 className="admin-hub__card-title">Data Safety & Tools</h3>
+              <h3 className="admin-hub__card-title">Data Safety & Direct Device Upload</h3>
               <p style={{ fontSize: "0.88rem", color: "var(--color-text-muted, #55503f)", margin: "0 0 1.25rem 0" }}>
-                Download a complete JSON snapshot of your portfolio content anytime for safety, or reset back to source files if needed.
+                Upload your portfolio data file directly from your device to instantly restore all projects, bio, skills, and photos across any browser or phone without manual copy-pasting.
               </p>
 
-              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-                <button type="button" onClick={handleExportBackup} className="admin-hub__primary-btn">
+              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
+                <label className="admin-hub__primary-btn" style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+                  <span>📤</span>
+                  <span>Upload Portfolio File from Device</span>
+                  <input
+                    type="file"
+                    accept=".json,application/json"
+                    onChange={handleImportPortfolioFile}
+                    style={{ display: "none" }}
+                  />
+                </label>
+
+                <button type="button" onClick={handleExportBackup} className="admin-hub__secondary-btn">
                   Download Full JSON Backup 💾
                 </button>
+
                 <button
                   type="button"
                   onClick={() => setDeleteTarget({ type: "reset", title: "all customized content" })}
